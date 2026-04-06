@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Baby ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --pink-bg: #fdf2f8;
+            --pink-accent: #f43f5e;
+            --pink-hover: #e11d48;
+            --text-color: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--pink-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            max-width: 350px;
+            width: 85%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .screen { display: none; }
+        .active { display: block; animation: fadeIn 0.5s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            object-fit: cover;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background: #eee; /* Placeholder while loading */
+        }
+
+        h1 { 
+            font-size: 1.4rem; 
+            margin-bottom: 1.5rem; 
+            color: #1f2937; 
+            font-weight: bold; 
+            min-height: 3.5rem;
+            line-height: 1.4;
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button {
+            background-color: var(--pink-accent);
+            color: white;
+            border: none;
+            padding: 14px 0;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            width: 100%;
+            outline: none;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #noBtn {
+            background-color: #d1d5db;
+            color: #4b5563;
+            font-size: 0.9rem;
+        }
+
+        .message-box {
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #4b5563;
+        }
+
+        /* Shake animation for the "No" click */
+        .shake {
+            animation: shake Anim 0.5s ease-in-out;
+        }
+
+        @keyframes shakeAnim {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <div id="screen1" class="screen active">
+            <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHJueGZ6bm93ZzR4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnVwPTE/MDJ9IbxxvDUQM/giphy.gif" class="main-img" alt="Kitty">
+            <h1>Happy Birthday <br> my 𝐊𝐊 ♡</h1>
+            <button onclick="nextScreen(2)">Next!! ♪~ ♫</button>
+        </div>
+
+        <div id="screen2" class="screen">
+            <img id="screen2Img" src="https://i.pinimg.com/originals/66/29/d9/6629d95495d02be0ab2a7601f18d4928.gif" class="main-img" alt="Letter">
+            <h1 id="questionText">Do you want to open it? 💌</h1>
+            <div class="btn-container">
+                <button id="yesBtn" onclick="finalScreen()">Open it</button>
+                <button id="noBtn" onclick="noClicked()">No ty</button>
+            </div>
+        </div>
+
+        <div id="screen3" class="screen">
+            <div class="message-box">
+                <h2 style="color: var(--pink-accent); text-align: center; margin-top: 0;">Surprise! ( ˶ˆ꒳ˆ˵ )</h2>
+                <hr style="border: 0; border-top: 1px solid #ffe4e6; margin-bottom: 20px;">
+                <p><b>Happy Birthday, MY BABY (＾▽＾)</b></p>
+                <p>It's your birthday today. Don't think for a second that I forgot!</p>
+                <p>Happy Birthday to the loveliest July girl! Getting to know you and talking to you is definitely the best part of my day. I hope all your birthday wishes come true today. Have a blast! ✨🍰 အမြဲတမ်း ပျော်ရွှင်ပြီး ကျန်းမာပါစေလို့ ဆုတောင်းပေးပါတယ်။ အများကြီး ချစ်တယ်နော်။ ❤️</p>
+                <p style="text-align: right; font-weight: bold; margin-top: 20px; color: var(--pink-accent);">Love you forever, <br> [hi"]</p>
+            </div>
+            <button onclick="location.reload()" style="margin-top: 20px; background: #f3f4f6; color: #6b7280; font-size: 0.8rem; padding: 10px 0;">Replay ♡</button>
+        </div>
+    </div>
+
+    <script>
+        let noCount = 0;
+        let yesSize = 1;
+        
+        const sadGifs = [
+            "https://media.tenor.com/YNqzKzPOLTsAAAAM/emote.gif",
+            "https://i.pinimg.com/originals/f3/78/4d/f3784dc54de78b85eac662dc55ba64aa.gif",
+            "https://media.tenor.com/eebKmr4eKKcAAAAM/sad-wher.gif",
+            "https://i.pinimg.com/originals/35/55/00/3555002367083c0d23f38a336b210c2d.gif",
+            "https://i.pinimg.com/originals/ca/52/0f/ca520fbaa1cf8d75a52b676c220b4ca7.gif"
+        ];
+
+        const noTexts = [
+            "No ty",
+            "Are you sure? 🥺",
+            "Really?? 😭",
+            "Pleaseeee.. ✨",
+            "Think again! 💖",
+            "You can't say no! 😤"
+        ];
+
+        function nextScreen(screenNum) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen' + screenNum).classList.add('active');
+            
+            if(screenNum === 2) {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        function noClicked() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const question = document.getElementById('questionText');
+            const img = document.getElementById('screen2Img');
+            const container = document.getElementById('mainContainer');
+
+            noCount++;
+            
+            // 1. Update Text
+            question.innerText = "Let's try again? PLEASEE??";
+            
+            // 2. Cycle GIF
+            img.src = sadGifs[noCount % sadGifs.length];
+
+            // 3. Cycle No Button Text
+            noBtn.innerText = noTexts[noCount % noTexts.length];
+            
+            // 4. Make "Yes" button grow bigger!
+            yesSize += 0.15;
+            yesBtn.style.transform = `scale(${yesSize})`;
+            
+            // 5. Shake Effect
+            container.classList.remove('shake');
+            void container.offsetWidth; // Trigger reflow to restart animation
+            container.classList.add('shake');
+        }
+
+        function finalScreen() {
+            nextScreen(3);
+            // Big celebration confetti
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+              confetti({
+                particleCount: 3,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#f43f5e', '#ffb6c1']
+              });
+              confetti({
+                particleCount: 3,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#f43f5e', '#ffb6c1']
+              });
+
+              if (Date.now() < end) {
+                requestAnimationFrame(frame);
+              }
+            }());
+        }
+    </script>
+</body>
+</html>
